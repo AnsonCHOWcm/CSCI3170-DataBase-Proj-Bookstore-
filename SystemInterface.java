@@ -2,6 +2,7 @@ package Main;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 import java.text.*;
 
 public class SystemInterface {
@@ -32,7 +33,7 @@ public class SystemInterface {
 			String customerSql = "Create table customer"+
 			                     "(customer_id VARCHAR(10) NOT NULL,"+
 					             "name VARCHAR(50) NOT NULL,"+
-			                     "shippig_address VARCHAR(200) NOT NULL,"+
+			                     "shipping_address VARCHAR(200) NOT NULL,"+
 					             "credit_card_no CHAR(19),"+
 			                     "CONSTRAINT PRIMARY KEY (customer_id))";
 			
@@ -160,8 +161,8 @@ public class SystemInterface {
 	}
 	
 	public void SetSystemDate() throws ParseException {
-		java.util.Date OrderDate = null;
-		java.util.Date inputDate = null;
+		Date OrderDate = new Date();
+		Date inputDate = new Date();
         String pattern = "yyyy-MM-dd";
 		SimpleDateFormat ft = new SimpleDateFormat(pattern);
 		boolean flag = false ;
@@ -215,7 +216,7 @@ public class SystemInterface {
         System.out.println("4. Set System Date.");
         System.out.println("5. Back to main menu.");
 
-        choice = menuchecker.IntegerChecker();
+        choice = menuchecker.SystemIntegerChecker();
         switch(choice) {
             case 1: CreateTable();
                     break;

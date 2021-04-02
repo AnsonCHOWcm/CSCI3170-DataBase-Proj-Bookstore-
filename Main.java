@@ -10,8 +10,12 @@ public class Main {
     static String dbUsername = "Group20";
     static String dbPassword = "weareg20";
     static Connection con = null;
+    static java.util.Date system_time;
 
     public static void main(String[] args) throws Exception {
+    	
+
+		
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(dbAddress, dbUsername, dbPassword);
@@ -19,17 +23,21 @@ public class Main {
             System.out.println("[ERROR] Java MySQL DB Driver not found.");
             System.exit(0);
         }
+        
+    	String pattern = "yyyy-MM-dd";
+		SimpleDateFormat ft = new SimpleDateFormat(pattern);
+		system_time = ft.parse("0000-00-00");
 
         System.out.println("Connection Success\n\n");
         int choice = -1;
-        StringIntegerChecker checker = new StringIntegerChecker(1, 5);
+        StringIntegerChecker checker = new StringIntegerChecker();
 
         SystemInterface admin = new SystemInterface();
         Customer customer = new Customer();
         Bookstore bookstore = new Bookstore();
 
         loop: while (true) {
-            System.out.println("The System Date is now : " + admin.t);
+            System.out.println("The System Date is now : " + system_time);
             System.out.println("<This is the Book Ordering System>");
             System.out.println("----------------------------------------");
             System.out.println("1. System interface.");
@@ -38,7 +46,7 @@ public class Main {
             System.out.println("4. Show System Date.");
             System.out.println("5. Quit the system.......");
 
-            choice = checker.IntegerChecker();
+            choice = checker.SystemIntegerChecker();
             switch(choice) {
                 case 1: admin.CommandLineInterface();
                         break;
@@ -46,7 +54,7 @@ public class Main {
                         break;
                 case 3: bookstore.CommandLineInterface();
                         break;
-                case 4: System.out.println("The System Date is now : " + admin.t);
+                case 4: System.out.println("The System Date is now : " + system_time);
                         break;
                 case 5: System.out.println("See you next time. Bye Bye.");
                 break loop;

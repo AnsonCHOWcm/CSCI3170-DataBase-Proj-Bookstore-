@@ -3,19 +3,18 @@ package Main;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
+
+
+
 import java.text.*;
 
 public class SystemInterface {
-	java.util.Date t;
 	StringIntegerChecker menuchecker;
     static Connection con = Main.con;
 	
 	public SystemInterface() throws ParseException {
-        String pattern = "yyyy-MM-dd";
-		SimpleDateFormat ft = new SimpleDateFormat(pattern);
-		t = ft.parse("0000-00-00");
 		
-		menuchecker = new StringIntegerChecker(1,5);
+		menuchecker = new StringIntegerChecker();
 	}
 	
 	public void CreateTable() {
@@ -46,7 +45,7 @@ public class SystemInterface {
 					           "CONSTRAINT PRIMARY KEY (order_id),"+
 			                   "FOREIGN KEY (customer_id) REFERENCES customer ON DELETE NO ACTION,"+
 			                   "CHECK (charge >=0),"+
-					           "CHECK (shippig_status == Y||shippig_status == N))";
+					           "CHECK (shippig_status == 'Y' ||shippig_status == 'N'))";
 			
 			String orderingSql = "Create table ordering"+
 			                     "(order_id CHAR(8) NOT NULL,"+
@@ -150,7 +149,7 @@ public class SystemInterface {
 			stmt.executeUpdate(insertBookAuthorSql);
 			
 			System.out.println("The Data is loaded Succussfully");
-			
+			reader.close();
 			
 			
 			
@@ -168,11 +167,14 @@ public class SystemInterface {
 		boolean flag = false ;
 		try{Statement stmt = con.createStatement();
 		
-		String query = "SELECT max(o_date)," + 
+		String query = "SELECT max(o_date) order_date," + 
 				       "FROM orders";
 		
 		ResultSet  rs = stmt.executeQuery(query);
-		OrderDate = rs.getDate("o_date");
+		while (rs.next()) {
+		OrderDate = rs.getDate("order_date");
+		
+		}
 		
 		} catch (Exception e ) {
 			System.out.println("Record reading failed. Please try again.");
@@ -186,7 +188,7 @@ public class SystemInterface {
 			System.out.println("Invaild Format! Please Try again!");
 			flag =  true ;
 		}
-		if (inputDate.before(t)) {
+		if (inputDate.before(Main.system_time)) {
 			System.out.println("Invaild input : Input Date eariler than the Original Date");
 			flag = true ;
 		}else if (OrderDate.after(inputDate)) {
@@ -197,9 +199,9 @@ public class SystemInterface {
 		}
 		} while (flag);
 		
-		t = inputDate;
+		Main.system_time = inputDate;
 		
-		System.out.println("Today is " + t);
+		System.out.println("Today is " + Main.system_time);
 		
 	}
 	
@@ -207,7 +209,7 @@ public class SystemInterface {
 	
     public void CommandLineInterface() throws ParseException {
 	    int choice = -1;
-        loop: while (true) {
+        while (true) {
         System.out.println("<This is the system interface.>");
         System.out.println("-------------------------------");
         System.out.println("1. Create Table.");

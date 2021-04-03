@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 public class Main {
     static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db20";
-    static String dbUsername = "Group20";
-    static String dbPassword = "weareg20";
+    static String dbUsername = "db016";
+    static String dbPassword = "tc7fwpit";
     static Connection con = null;
     static java.util.Date system_time;
 

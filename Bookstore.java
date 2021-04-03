@@ -13,7 +13,7 @@ public class Bookstore {
     	menuchecker = new StringIntegerChecker();
     }
     
-    public void CommandLineInterface() {
+    public void CommandLineInterface() throws ParseException {
     	int choice = -1;
         while (true) {
         System.out.println("<This is the bookstore interface.>");
@@ -109,27 +109,55 @@ public class Bookstore {
     }
     
     public void OrderQuery() throws ParseException {
-    	java.util.Date month = new java.util.Date();
+    	java.util.Date Date = new java.util.Date();
     	String pattern = "yyyy-MM";
 		SimpleDateFormat ft = new SimpleDateFormat(pattern);
 		int total_charge = 0;
 		
 		try {
-			month = ft.parse(menuchecker.monthchecker());
-			String psql = "SELECT SUM(charge)"+
+			Date = ft.parse(menuchecker.monthchecker());
+			int month = Date.getMonth()+1;
+			int year = Date.getYear()+1900;
+			String psql = "SELECT SUM(charge) sum"+
 			              "FROM orders" +
 					      "WHERE shipping_status = 'Y' AND month(o_date) = ? AND year(o_date) = ?";
+			
 			PreparedStatement pstmt = con.prepareStatement(psql);
 			
-			pstmt.setDate(1,);
-			pstmt.setDate(2,);
+			pstmt.setInt(1,month);
+			pstmt.setInt(2,year);
 			
+			ResultSet rs = pstmt.executeQuery();
 			
+			while(rs.next()) {
+				total_charge = rs.getInt("sum");
+			}
 			
+			String psql2 = "SELECT order_id, customer_id,o_date,charge"+
+			                          "FROM orders" +
+					                  "WHERE shipping_status = 'Y' AND month(o_date) = ? AND year(o_date) = ?";
 			
+			PreparedStatement pstmt2 = con.prepareStatement(psql2);
+			
+			pstmt.setInt(1,month);
+			pstmt.setInt(2,year);
+			
+			ResultSet rs2 = pstmt2.executeQuery();
+			int number = 0 ;
+			while(rs2.next()) {
+				number++;
+				System.out.println("Record : " + number);
+				System.out.println("order_id : " + rs2.getString("order_id"));
+				System.out.println("customer_id : " + rs2.getString("customer_id"));
+				System.out.println("date : " + rs2.getDate("o_date"));
+				System.out.println("charge : " + rs2.getInt("charge"));
+			}
+			
+			System.out.println("Total charge of the month is " + total_charge);
+	
 		}catch (SQLException se) {
 			se.printStackTrace();
-    		System.out.println("[Error] Order Update failed.");
+    		System.out.println("[Error] Order Query failed.");
 		}
     	
     	
@@ -137,6 +165,39 @@ public class Bookstore {
     }
     
     public void NMostPopular() {
+    	int N = -1 ;
+    	Scanner reader = new Scanner(System.in);
+    	
+    	try {
+    		System.out.println("Please input the N popular book number : ");
+    		N = reader.nextInt();
+    		
+    		String psql = "SELECT TOP ? ISBN , title , SUM(quantity) AS total"+
+    		              "FROM book , ordering"+
+    		              "GROUP BY ISBN , title"+
+    		              "ORDER BY total DESC , ISBN , title ASC";
+    		
+    		PreparedStatement pstmt = con.prepareStatement(psql);
+    		
+    		pstmt.setInt(1,N);
+    		
+    		ResultSet rs = pstmt.executeQuery();
+    		
+    		System.out.println("ISBN             Title             Copies");
+    		
+    		while(rs.next()) {
+    			System.out.print(rs.getString("ISBN"));
+    			System.out.print("    ");
+    			System.out.print(rs.getString("title"));
+    			System.out.print("    ");
+    			System.out.println(rs.getInt("total"));
+    		}
+    		reader.close();
+    	}catch(SQLException se) {
+    		se.printStackTrace();
+    		System.out.println("[Error] Order Update failed.");
+    	}
+    	
     	
     }
 

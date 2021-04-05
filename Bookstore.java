@@ -23,7 +23,8 @@ public class Bookstore {
         System.out.println("3. N Most Popular Book Query.");
         System.out.println("4. Back to main menu.");
 
-        choice = menuchecker.BookStoreIntegerChecker();
+		System.out.println("Your choice?...");
+        choice = menuchecker.IntegerChecker(1, 4);
         switch(choice) {
             case 1: OrderUpdate();
                     break;

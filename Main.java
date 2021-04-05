@@ -13,9 +13,6 @@ public class Main {
     static java.util.Date system_time;
 
     public static void main(String[] args) throws Exception {
-    	
-
-		
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(dbAddress, dbUsername, dbPassword);
@@ -23,18 +20,15 @@ public class Main {
             System.out.println("[ERROR] Java MySQL DB Driver not found.");
             System.exit(0);
         }
-        
-    	String pattern = "yyyy-MM-dd";
-		SimpleDateFormat ft = new SimpleDateFormat(pattern);
-		system_time = ft.parse("0000-00-00");
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat ft = new SimpleDateFormat(pattern);
+        system_time = ft.parse("0000-00-00");
 
         System.out.println("Connection Success\n\n");
         int choice = -1;
-        StringIntegerChecker checker = new StringIntegerChecker();
 
-        SystemInterface admin = new SystemInterface();
-        Customer customer = new Customer();
-        Bookstore bookstore = new Bookstore();
+        StringIntegerChecker checker = new StringIntegerChecker();
 
         loop: while (true) {
             System.out.println("The System Date is now : " + system_time);
@@ -46,17 +40,27 @@ public class Main {
             System.out.println("4. Show System Date.");
             System.out.println("5. Quit the system.......");
 
-            choice = checker.SystemIntegerChecker();
-            switch(choice) {
-                case 1: admin.CommandLineInterface();
-                        break;
-                case 2: customer.CommandLineInterface();
-                        break;
-                case 3: bookstore.CommandLineInterface();
-                        break;
-                case 4: System.out.println("The System Date is now : " + system_time);
-                        break;
-                case 5: System.out.println("See you next time. Bye Bye.");
+            System.out.println("Please enter your choice??..");
+            choice = checker.IntegerChecker(1, 5);
+
+            switch (choice) {
+            case 1:
+                SystemInterface admin = new SystemInterface();
+                admin.CommandLineInterface();
+                break;
+            case 2:
+                Customer customer = new Customer();
+                customer.CommandLineInterface();
+                break;
+            case 3:
+                Bookstore bookstore = new Bookstore();
+                bookstore.CommandLineInterface();
+                break;
+            case 4:
+                System.out.println("The System Date is now : " + system_time);
+                break;
+            case 5:
+                System.out.println("See you next time. Bye Bye.");
                 break loop;
             }
         }

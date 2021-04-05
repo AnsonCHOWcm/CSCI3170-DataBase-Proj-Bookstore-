@@ -24,7 +24,8 @@ public class Customer {
         System.out.println("3. Author Name");
         System.out.println("4. Exit");
 
-        choice = menuchecker.CustomerIntegerChecker();
+		System.out.println("Your choice?...");
+        choice = menuchecker.IntegerChecker(1, 5);
         switch(choice) {
             case 1: SearchISBN();
                     break;
@@ -44,7 +45,9 @@ public class Customer {
 	    String ISBN = "";    
 	    
 	    try {
+			System.out.println("Please enter ISBN : ");
 	    	ISBN = menuchecker.ISBNchecker();
+
 	    	String psql1 = "SELECT * FROM book  WHERE ISBN = ? ";
 	    	PreparedStatement pstmt = con.prepareStatement(psql1);
 	    	pstmt.setString(1, ISBN);
@@ -182,7 +185,9 @@ public class Customer {
     		System.out.println("Please enter ISBN and then the quantity.");
     		System.out.println("You can press \"L\" to see ordered list, or \"F\" to finish ordering");
     		while (true) {
+				System.out.println("Please enter ISBN : ");
     			ISBN = menuchecker.ISBNchecker();
+				
     			quantity = menuchecker.Quantitychecker();
     			
     			psql = "SELECT unit_price , no_of_copies" +
@@ -627,7 +632,9 @@ public class Customer {
         System.out.println("4. Order Query.");
         System.out.println("5. Back to main menu.");
 
-        choice = menuchecker.CustomerIntegerChecker();
+		System.out.println("Your choice?...");
+        choice = menuchecker.IntegerChecker(1, 5);
+		
         switch(choice) {
             case 1: BookSearch();
                     break;

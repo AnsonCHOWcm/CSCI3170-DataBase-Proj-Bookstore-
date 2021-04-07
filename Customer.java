@@ -7,7 +7,7 @@ public class Customer {
 	Checker checker;
 
 	public Customer() throws ParseException {
-		checker = new Checker();
+		this.checker = new Checker();
 	}
 
 	public void BookSearch() {
@@ -571,8 +571,7 @@ public class Customer {
 
 	}
 
-	public void CommandLineInterface() throws ParseException {
-		int choice = -1;
+	public void CommandLineInterface(Scanner in) throws ParseException {
 		while (true) {
 			System.out.println("<This is the customer interface.>");
 			System.out.println("-------------------------------");
@@ -581,25 +580,27 @@ public class Customer {
 			System.out.println("3. Order Altering.");
 			System.out.println("4. Order Query.");
 			System.out.println("5. Back to main menu.");
-
 			System.out.println("Your choice?...");
-			choice = Checker.IntegerChecker(1, 5);
-
-			if (choice == 1) {
-				BookSearch();
-			} else if (choice == 2) {
-				OrderCreation();
-			} else if (choice == 3) {
-				OrderAltering();
-			} else if (choice == 4) {
-				OrderQuery();
-			} else {
-				System.out.println("Thank you. See you next time. Bye Bye.");
-				return;
+			
+			try {
+				if (in.hasNext()) {
+                    int choice = in.nextInt();
+					if (choice == 1) {
+						BookSearch();
+					} else if (choice == 2) {
+						OrderCreation();
+					} else if (choice == 3) {
+						OrderAltering();
+					} else if (choice == 4) {
+						OrderQuery();
+					} else {
+						System.out.println("Thank you. See you next time. Bye Bye.");
+						return;
+					}
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("[Error] Invalid Input");
 			}
-
 		}
-
 	}
-
 }

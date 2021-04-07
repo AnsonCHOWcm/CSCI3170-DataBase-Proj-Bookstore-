@@ -10,8 +10,7 @@ public class Bookstore {
 		menuchecker = new Checker();
 	}
 
-	public void CommandLineInterface() throws ParseException {
-		int choice = -1;
+	public void CommandLineInterface(Scanner in) throws ParseException {
 		while (true) {
 			System.out.println("<This is the bookstore interface.>");
 			System.out.println("------------------------------------");
@@ -19,19 +18,24 @@ public class Bookstore {
 			System.out.println("2. Order Query.");
 			System.out.println("3. N Most Popular Book Query.");
 			System.out.println("4. Back to main menu.");
-
 			System.out.println("Your choice?...");
-			choice = Checker.IntegerChecker(1, 4);
-
-			if (choice == 1) {
-				OrderUpdate();
-			} else if (choice == 2) {
-				OrderQuery();
-			} else if (choice == 3) {
-				NMostPopular();
-			} else {
-				System.out.println("Thank you. See you next time. Bye Bye.");
-				return;
+			
+			try {
+				if (in.hasNext()) {
+                    int choice = in.nextInt();
+					if (choice == 1) {
+						OrderUpdate();
+					} else if (choice == 2) {
+						OrderQuery();
+					} else if (choice == 3) {
+						NMostPopular();
+					} else {
+						System.out.println("Thank you. See you next time. Bye Bye.");
+						return;
+					}
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("[Error] Invalid Input");
 			}
 		}
 

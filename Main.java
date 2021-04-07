@@ -1,7 +1,11 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class Main {
     static java.util.Date system_time;
 
     public static void main(String[] args) throws Exception {
+        Scanner in = new Scanner(System.in);
         SystemDate.createTheInstance();
         SystemDate sdate = SystemDate.getInstance();
 
@@ -16,28 +20,36 @@ public class Main {
             System.out.println("5. Quit the system.......");
 
             System.out.println("Please enter your choice??..");
-            int choice = Checker.IntegerChecker(1, 5);
 
             try {
-                if (choice == 1) {
-                    SystemInterface admin = new SystemInterface();
-                    admin.CommandLineInterface();
-                } else if (choice == 2) {
-                    Customer customer = new Customer();
-                    customer.CommandLineInterface();
-                } else if (choice == 3) {
-                    Bookstore bookstore = new Bookstore();
-                    bookstore.CommandLineInterface();
-                } else if (choice == 4) {
-                    System.out.println("The System Date is now : " + sdate);
-                } else {
-                    System.out.println("See you next time. Bye Bye.");
-                    break;
+                if (in.hasNext()) {
+                    int choice = in.nextInt();
+
+                    if (choice == 1) {
+                        SystemInterface admin = new SystemInterface();
+                        admin.CommandLineInterface(in);
+                    } else if (choice == 2) {
+                        Customer customer = new Customer();
+                        customer.CommandLineInterface(in);
+                    } else if (choice == 3) {
+                        Bookstore bookstore = new Bookstore();
+                        bookstore.CommandLineInterface(in);
+                    } else if (choice == 4) {
+                        System.out.println("The System Date is now : " + sdate);
+                    } else if (choice == 5){
+                        System.out.println("See you next time. Bye Bye.");
+                        break;
+                    } else {
+                        System.out.println("[Error] Please type between 1-5.");
+                    }
                 }
-            } catch (Exception e) {
+            } catch (InputMismatchException e) {
+				System.out.println("[Error] Invalid Input");
+			} catch (Exception e) {
                 System.out.println(e);
             }
-            
+
         }
+        in.close();
     }
 }

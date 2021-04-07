@@ -6,6 +6,10 @@ import java.text.*;
 public class SystemInterface {
 	Checker checker;
 
+	public SystemInterface() {
+		checker = new Checker();
+	}
+
 	public void CreateTable() {
         Connection con = DataBaseController.connectToSQL();
         try {
@@ -44,10 +48,6 @@ public class SystemInterface {
             se.printStackTrace();
             System.out.println("[Error]: All tables have been created. Please try deleting all the tables first.");
         }
-	}
-
-	public SystemInterface() {
-		checker = new Checker();
 	}
 
 	public void DeleteTable() {
@@ -178,8 +178,7 @@ public class SystemInterface {
 
 	}
 
-	public void CommandLineInterface() throws ParseException {
-		int choice = -1;
+	public void CommandLineInterface(Scanner in) throws ParseException {
 		while (true) {
 			System.out.println("<This is the system interface.>");
 			System.out.println("-------------------------------");
@@ -188,23 +187,27 @@ public class SystemInterface {
 			System.out.println("3. Insert Data.");
 			System.out.println("4. Set System Date.");
 			System.out.println("5. Back to main menu.");
-
 			System.out.println("Please enter your choice??..");
-			choice = Checker.IntegerChecker(1, 5);
 
-			if (choice == 1) {
-				CreateTable();
-			} else if (choice == 2) {
-				DeleteTable();
-			} else if (choice == 3) {
-				InsertData();
-			} else if (choice == 4) {
-				SetSystemDate();
-			} else {
-				System.out.println("See you next time. Bye Bye.");
-				return;
+			try {
+				if (in.hasNext()) {
+                    int choice = in.nextInt();
+					if (choice == 1) {
+						CreateTable();
+					} else if (choice == 2) {
+						DeleteTable();
+					} else if (choice == 3) {
+						InsertData();
+					} else if (choice == 4) {
+						SetSystemDate();
+					} else {
+						System.out.println("See you next time. Bye Bye.");
+						return;
+					}
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("[Error] Invalid Input");
 			}
 		}
-
 	}
 }

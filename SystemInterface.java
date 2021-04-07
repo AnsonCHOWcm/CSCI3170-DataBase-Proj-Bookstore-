@@ -85,11 +85,11 @@ public class SystemInterface {
 			String path = reader.nextLine().replace("\n", "");
 			Statement stmt = con.createStatement();
 
-			String bookpath = path + "/book.txt";
-			String customerpath = path + "/customer.txt";
-			String orderspath = path + "/orders.txt";
-			String orderingpath = path + "/ordering.txt";
-			String bookauthorpath = path + "book_author.txt";
+			String bookpath = path + "/book.csv";
+			String customerpath = path + "/customer.csv";
+			String orderspath = path + "/orders.csv";
+			String orderingpath = path + "/ordering.csv";
+			String bookauthorpath = path + "/book_author.csv";
 
 			String insertBookSql = "LOAD DATA LOCAL INFILE \'" + bookpath + "\'" + " INTO TABLE book"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'"
@@ -97,7 +97,7 @@ public class SystemInterface {
 
 			String insertCustomerSql = "LOAD DATA LOCAL INFILE \'" + customerpath + "\'" + " INTO TABLE customer"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'"
-					+ " (custiomer_id , name , shipping_address , credit_card_no)";
+					+ " (customer_id , name , shipping_address , credit_card_no)";
 
 			String insertOrdersSql = "LOAD DATA LOCAL INFILE \'" + orderspath + "\'" + " INTO TABLE orders"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'"

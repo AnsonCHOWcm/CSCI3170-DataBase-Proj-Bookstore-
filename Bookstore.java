@@ -151,8 +151,8 @@ public class Bookstore {
 			System.out.println("Please input the N popular book number : ");
 			N = reader.nextInt();
 
-			String psql = "SELECT TOP ? ISBN , title , SUM(quantity) AS total" + "FROM book , ordering"
-					+ "GROUP BY ISBN , title" + "ORDER BY total DESC , ISBN , title ASC";
+			String psql = "SELECT ISBN , title , SUM(quantity) AS total" + "FROM book , ordering"
+					+ "GROUP BY ISBN , title" + "ORDER BY total DESC , ISBN , title ASC LIMIT ?";
 
 			PreparedStatement pstmt = con.prepareStatement(psql);
 

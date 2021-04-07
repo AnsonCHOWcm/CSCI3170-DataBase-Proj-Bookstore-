@@ -19,7 +19,7 @@ public class Main {
             System.out.println("4. Show System Date.");
             System.out.println("5. Quit the system.......");
 
-            System.out.println("Please enter your choice??..");
+            System.out.print("Please enter your choice??..");
 
             try {
                 if (in.hasNext()) {

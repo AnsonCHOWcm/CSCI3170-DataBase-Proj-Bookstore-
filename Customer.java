@@ -580,7 +580,7 @@ public class Customer {
 			System.out.println("3. Order Altering.");
 			System.out.println("4. Order Query.");
 			System.out.println("5. Back to main menu.");
-			System.out.println("Your choice?...");
+			System.out.print("Your choice?...");
 			
 			try {
 				if (in.hasNext()) {

@@ -18,7 +18,7 @@ public class Bookstore {
 			System.out.println("2. Order Query.");
 			System.out.println("3. N Most Popular Book Query.");
 			System.out.println("4. Back to main menu.");
-			System.out.println("Your choice?...");
+			System.out.print("Your choice?...");
 			
 			try {
 				if (in.hasNext()) {

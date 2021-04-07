@@ -187,7 +187,7 @@ public class SystemInterface {
 			System.out.println("3. Insert Data.");
 			System.out.println("4. Set System Date.");
 			System.out.println("5. Back to main menu.");
-			System.out.println("Please enter your choice??..");
+			System.out.print("Please enter your choice??..");
 
 			try {
 				if (in.hasNext()) {

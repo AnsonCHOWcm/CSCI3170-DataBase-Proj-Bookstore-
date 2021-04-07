@@ -13,13 +13,15 @@ public class Checker {
 
 		while (true) {
 			try {
-				int cmd = in.nextInt();
+				if (in.hasNext()) {
+					int cmd = in.nextInt();
 
-				if (cmd >= min && cmd <= max) {
-					in.close();
-					return cmd;
-				} else {
-					System.out.println("[Error] Please type between " + min + "-" + max + ".");
+					if (cmd >= min && cmd <= max) {
+						in.close();
+						return cmd;
+					} else {
+						System.out.println("[Error] Please type between " + min + "-" + max + ".");
+					}
 				}
 			} catch (InputMismatchException e) {
 				System.out.println("[Error] Invalid Input");

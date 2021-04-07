@@ -14,7 +14,7 @@ public class Checker {
 			reader = new Scanner(System.in);
 			input = reader.nextLine().replace("\n", "");
 			try {
-				if (input.matches("\\d{1}-\\d{4}-\\d{4}-\\d{1}")) {
+				if (!(input.matches("\\d{1}-\\d{4}-\\d{4}-\\d{1}"))) {
 					System.out.println("[Error] Input does not follow the format of ISBN. Please try again.");
 				} else {
 					break;

@@ -8,7 +8,7 @@ public class SystemInterface {
 	static Connection con = Main.con;
 
 	public SystemInterface() throws ParseException {
-		checker = Checker.getInstance();
+		checker = new Checker();
 	}
 
 	public void CreateTable() {

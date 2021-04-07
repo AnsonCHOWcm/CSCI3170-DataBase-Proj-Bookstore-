@@ -44,8 +44,9 @@ public class SystemInterface {
             se.printStackTrace();
             System.out.println("[Error]: All tables have been created. Please try deleting all the tables first.");
         }
+	}
 
-	public SystemInterface() throws ParseException {
+	public SystemInterface() {
 		checker = new Checker();
 	}
 
@@ -192,7 +193,7 @@ public class SystemInterface {
 			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
-				DataBaseController.CreateTable();
+				CreateTable();
 			} else if (choice == 2) {
 				DeleteTable();
 			} else if (choice == 3) {

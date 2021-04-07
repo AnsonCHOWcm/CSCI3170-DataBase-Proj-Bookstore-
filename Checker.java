@@ -9,10 +9,9 @@ public class Checker {
 	}
 
 	static public int IntegerChecker(int min, int max) {
-		Scanner in = new Scanner(System.in);
-
 		while (true) {
 			try {
+				Scanner in = new Scanner(System.in);
 				if (in.hasNext()) {
 					int cmd = in.nextInt();
 
@@ -286,7 +285,7 @@ public class Checker {
 			
 			try {
 				if (in.hasNext()) {
-					r = reader.nextLine().replace("\n", "");
+					r = in.nextLine().replace("\n", "");
 					if (r.equals("Y") || r.equals("N"))
 						break;
 					else 

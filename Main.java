@@ -18,21 +18,26 @@ public class Main {
             System.out.println("Please enter your choice??..");
             int choice = Checker.IntegerChecker(1, 5);
 
-            if (choice == 1) {
-                SystemInterface admin = new SystemInterface();
-                admin.CommandLineInterface();
-            } else if (choice == 2) {
-                Customer customer = new Customer();
-                customer.CommandLineInterface();
-            } else if (choice == 3) {
-                Bookstore bookstore = new Bookstore();
-                bookstore.CommandLineInterface();
-            } else if (choice == 4) {
-                System.out.println("The System Date is now : " + sdate);
-            } else {
-                System.out.println("See you next time. Bye Bye.");
-                break;
+            try {
+                if (choice == 1) {
+                    SystemInterface admin = new SystemInterface();
+                    admin.CommandLineInterface();
+                } else if (choice == 2) {
+                    Customer customer = new Customer();
+                    customer.CommandLineInterface();
+                } else if (choice == 3) {
+                    Bookstore bookstore = new Bookstore();
+                    bookstore.CommandLineInterface();
+                } else if (choice == 4) {
+                    System.out.println("The System Date is now : " + sdate);
+                } else {
+                    System.out.println("See you next time. Bye Bye.");
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
+            
         }
     }
 }

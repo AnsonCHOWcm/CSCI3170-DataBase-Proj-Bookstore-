@@ -1,6 +1,5 @@
-package Main;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class StringIntegerChecker {
 	Scanner reader;

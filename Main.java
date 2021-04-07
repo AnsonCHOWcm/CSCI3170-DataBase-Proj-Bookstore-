@@ -1,4 +1,3 @@
-package Main;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -6,9 +5,9 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
-    static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db20";
-    static String dbUsername = "db016";
-    static String dbPassword = "tc7fwpit";
+    static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db1";
+    static String dbUsername = "Group1";
+    static String dbPassword = "CSCI3170";
     static Connection con = null;
     static java.util.Date system_time;
 

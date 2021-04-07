@@ -16,7 +16,7 @@ public class Day implements Cloneable {
 
 	@Override
 	public String toString() {
-		return String.format("%02d", day) + "-" + String.format("%02d", month) + "-" + year;
+		return year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
 	}
 
 	@Override

@@ -38,64 +38,51 @@ public class Bookstore {
 	}
 
 	public void OrderUpdate() {
-		int OID = 0;
-		int number_of_books = 0;
-		String shipping_status = "";
-		String order_id = "";
+		int oid;
+		int number_of_books;
+		String shipping_status;
+		String order_id;
 		Connection con = DataBaseController.connectToSQL();
 
 		try {
-			OID = menuchecker.OrderIDchecker();
-			String psql = "SELECT shipping_status , order_id" + "FROM orders" + "WHERE order_id = (CAST(? AS CHAR(8)))";
-			PreparedStatement pstmt = con.prepareStatement(psql);
-			pstmt.setInt(1, OID);
-			ResultSet rs = pstmt.executeQuery();
+			oid = Checker.OrderIDchecker();
+			String sql = "SELECT shipping_status , order_id FROM orders WHERE order_id = ?";
+			ArrayList<String> sqlParms = new ArrayList<String>();
+    		sqlParms.add(String.valueOf(oid));
 
-			while (rs.next()) {
-				shipping_status = rs.getString("shipping_status");
-				order_id = rs.getString("order_id");
-			}
+			ResultSet rs = DataBaseController.runSQL(sql, sqlParms);
+			rs.next();
+			shipping_status = rs.getString("shipping_status");
+			order_id = rs.getString("order_id");
 
-			if (shipping_status == "Y") {
+			if (shipping_status.equals("Y")) {
 				System.out.println("The order has been shipped");
 			} else {
-
-				String psql2 = "SELECT COUNT(*) as number" + "FROM ordering"
-						+ "WHERE order_id = (CAST(? AS CHAR(8))) AND quantity > 0";
-				PreparedStatement pstmt2 = con.prepareStatement(psql2);
-				pstmt2.setInt(1, OID);
-				ResultSet rs2 = pstmt2.executeQuery();
-
-				while (rs2.next()) {
-					number_of_books = rs2.getInt("number");
-				}
+				sql = "SELECT COUNT(*) as number FROM ordering WHERE order_id = ? AND quantity > 0";
+				ResultSet rs2 = DataBaseController.runSQL(sql, sqlParms);
+				rs2.next();
+				number_of_books = rs2.getInt("number");
 
 				if (number_of_books == 0) {
 					System.out.println("There is no any book in the order. Please send a reminder to the user");
-					con.close();
 					return;
 				}
 
 				System.out.println("the Shipping status of " + order_id + " is " + shipping_status + "and"
 						+ number_of_books + "books ordered");
-				String UserResponds = menuchecker.UserRespondchecker();
 
-				if (UserResponds == "Y") {
-					String sql = "UPDATE orders" + "SET shipping_status = Y" + "WHERE order_id = (CAST(? AS CHAR(8)))";
-					Statement stmt = con.createStatement();
-					stmt.executeUpdate(sql);
+				String UserResponds = Checker.UserRespondchecker();
+
+				if (UserResponds.equals("Y")) {
+					sql = "UPDATE orders SET shipping_status = Y WHERE order_id = ?";
+					DataBaseController.runSQL(sql, sqlParms);
 
 					System.out.println("The Update has been made");
-				} else {
-					con.close();
-					return;
 				}
 			}
-			con.close();
-		} catch (SQLException se) {
-			se.printStackTrace();
-			System.out.println("[Error] Order Update failed.");
-		}
+		} catch (SQLException e) {
+            System.out.println(e);
+        }
 	}
 
 	public void OrderQuery() throws ParseException {

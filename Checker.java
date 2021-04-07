@@ -234,25 +234,26 @@ public class Checker {
 		}
 	}
 
-	public int OrderIDchecker() {
-		int input = 0;
+	static public int OrderIDchecker() {
+		int oid;
+		Scanner in = new Scanner(System.in);
 
 		while (true) {
 			System.out.println("What is the Order ID ? : ");
-			reader = new Scanner(System.in);
-			input = reader.nextInt();
 			try {
-				if (input < 0) {
-					System.out.println("[Error] Invaild Order ID. Please try again.");
-				} else {
-					break;
+				if (in.hasNext()) {
+					oid = in.nextInt();
+					if (oid <= 0)
+						System.out.println("[Error] Invaild Order ID. Please try again.");
+					else
+						break;
 				}
-			} catch (NumberFormatException e) {
-				System.out.println("[Error] Invaild Input");
+			} catch (InputMismatchException e) {
+				System.out.println("[Error] Invalid Input");
 			}
 		}
-
-		return input;
+		in.close();
+		return oid;
 	}
 
 	public String Actionchecker() {
@@ -276,25 +277,27 @@ public class Checker {
 		return input;
 	}
 
-	public String UserRespondchecker() {
-		String input = "";
+	static public String UserRespondchecker() {
+		String r;
+		Scanner in = new Scanner(System.in);
 
 		while (true) {
 			System.out.println("Are you sure to update the shipping status ? (Y/N) : ");
-			reader = new Scanner(System.in);
-			input = reader.nextLine().replace("\n", "");
+			
 			try {
-				if (input != "Y" & input != "N") {
-					System.out.println("[Error] Only Y or N can be entered (A = Yes / D = No)");
-				} else {
-					break;
+				if (in.hasNext()) {
+					r = reader.nextLine().replace("\n", "");
+					if (r.equals("Y") || r.equals("N"))
+						break;
+					else 
+						System.out.println("[Error] Only Y or N can be entered");
 				}
-			} catch (NumberFormatException e) {
-				System.out.println("[Error] Invaild Input");
+			} catch (InputMismatchException e) {
+				System.out.println("[Error] Invalid Input");
 			}
 		}
-
-		return input;
+		in.close();
+		return r;
 	}
 
 	public int choicechecker(int number) {

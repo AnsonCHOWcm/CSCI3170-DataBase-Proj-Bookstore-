@@ -8,7 +8,7 @@ public class SystemInterface {
 	static Connection con = Main.con;
 
 	public SystemInterface() throws ParseException {
-		checker = new Checker();
+		checker = Checker.getInstance();
 	}
 
 	public void CreateTable() {
@@ -16,7 +16,7 @@ public class SystemInterface {
 			Statement stmt = con.createStatement();
 			String bookSql = "Create table book" + "(ISBN CHAR(13)," + "title VARCHAR(100) NOT NULL,"
 					+ "unit_price INTEGER," + "no_of_copies INTEGER," + "CONSTRAINT PRIMARY KEY (ISBN),"
-					+ "CHECK (unit_price >=0)," + "CHECK (o_of_copies >=0))";
+					+ "CHECK (unit_price >=0)," + "CHECK (no_of_copies >=0))";
 
 			String customerSql = "Create table customer" + "(customer_id VARCHAR(10) NOT NULL,"
 					+ "name VARCHAR(50) NOT NULL," + "shipping_address VARCHAR(200) NOT NULL,"
@@ -24,17 +24,17 @@ public class SystemInterface {
 
 			String ordersSql = "Create table orders" + "(order_id CHAR(8)," + "o_date DATE," + "shipping_status CHAR,"
 					+ "charge INTEGER," + "customer_id VARCHAR(10) NOT NULL," + "CONSTRAINT PRIMARY KEY (order_id),"
-					+ "FOREIGN KEY (customer_id) REFERENCES customer ON DELETE NO ACTION," + "CHECK (charge >=0),"
-					+ "CHECK (shippig_status == 'Y' ||shippig_status == 'N'))";
+					+ "FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE NO ACTION,"
+					+ "CHECK (charge >=0) , CHECK (shipping_status = 'Y' || shipping_status = 'N'))";
 
 			String orderingSql = "Create table ordering" + "(order_id CHAR(8) NOT NULL," + "ISBN CHAR(13),"
 					+ "quantity INTEGER," + "CONSTRAINT PRIMARY KEY (order_id , ISBN),"
-					+ "FOREIGN KEY (order_id) REFERENCES orders ON DELETE NO ACTION,"
-					+ "FOREIGN KEY (ISBN) REFERENCES book," + "CHECK (quantity>=0))";
+					+ "FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE NO ACTION,"
+					+ "FOREIGN KEY (ISBN) REFERENCES book(ISBN)," + "CHECK (quantity>=0))";
 
 			String bookauthorSql = "Create table book_author" + "(ISBN CHAR(13) NOT NULL,"
 					+ "author_name VARCHAR(50) NOT NULL," + "CONSTRAINT PRIMARY KEY (ISBN , author_name),"
-					+ "FOREIGN KEY (ISBN) REFERENCES book ON DELETE NO ACTION)";
+					+ "FOREIGN KEY (ISBN) REFERENCES book(ISBN) ON DELETE NO ACTION)";
 
 			stmt.executeUpdate(bookSql);
 			stmt.executeUpdate(customerSql);
@@ -53,17 +53,17 @@ public class SystemInterface {
 	public void DeleteTable() {
 		try {
 			Statement stmt = con.createStatement();
-			String delBook = "drop table book if exists book";
-			String delCustomer = "drop table customer if exists customer";
-			String delOrders = "drop table orders if exists orders";
-			String delOrdering = "drop table ordering if exists ordering";
-			String delBookAuthor = "drop book_author if exists book_author";
-
-			stmt.executeUpdate(delBook);
-			stmt.executeUpdate(delCustomer);
-			stmt.executeUpdate(delOrders);
+			String delBook = "drop table if exists book";
+			String delCustomer = "drop table if exists customer";
+			String delOrders = "drop table if exists orders";
+			String delOrdering = "drop table if exists ordering";
+			String delBookAuthor = "drop table if exists book_author";
+			
 			stmt.executeUpdate(delOrdering);
 			stmt.executeUpdate(delBookAuthor);
+			stmt.executeUpdate(delOrders);
+			stmt.executeUpdate(delBook);
+			stmt.executeUpdate(delCustomer);
 
 			System.out.println("Done! All Tables are deleted.");
 
@@ -86,22 +86,22 @@ public class SystemInterface {
 			String orderingpath = path + "/ordering.txt";
 			String bookauthorpath = path + "book_author.txt";
 
-			String insertBookSql = "LOAD DATA LOCAL INFILE \'" + bookpath + "\'" + " INTO TABLE Vehicle"
+			String insertBookSql = "LOAD DATA LOCAL INFILE \'" + bookpath + "\'" + " INTO TABLE book"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'"
 					+ " (ISBN , title , unit_price , no_of_copies)";
 
-			String insertCustomerSql = "LOAD DATA LOCAL INFILE \'" + customerpath + "\'" + " INTO TABLE Vehicle"
+			String insertCustomerSql = "LOAD DATA LOCAL INFILE \'" + customerpath + "\'" + " INTO TABLE customer"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'"
 					+ " (custiomer_id , name , shipping_address , credit_card_no)";
 
-			String insertOrdersSql = "LOAD DATA LOCAL INFILE \'" + orderspath + "\'" + " INTO TABLE Vehicle"
+			String insertOrdersSql = "LOAD DATA LOCAL INFILE \'" + orderspath + "\'" + " INTO TABLE orders"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'"
 					+ " (order_id , o_date , shipping_status , charge , customer_id)";
 
-			String insertOrderingSql = "LOAD DATA LOCAL INFILE \'" + orderingpath + "\'" + " INTO TABLE Vehicle"
+			String insertOrderingSql = "LOAD DATA LOCAL INFILE \'" + orderingpath + "\'" + " INTO TABLE ordering"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'" + " (order_id , ISBN , quantity)";
 
-			String insertBookAuthorSql = "LOAD DATA LOCAL INFILE \'" + bookauthorpath + "\'" + " INTO TABLE Vehicle"
+			String insertBookAuthorSql = "LOAD DATA LOCAL INFILE \'" + bookauthorpath + "\'" + " INTO TABLE book_author"
 					+ " FIELDS TERMINATED BY \',\'" + " LINES TERMINATED BY \'\\n\'" + " (ISBN , author_name)";
 
 			stmt.executeUpdate(insertBookSql);
@@ -180,7 +180,7 @@ public class SystemInterface {
 			System.out.println("5. Back to main menu.");
 
 			System.out.println("Please enter your choice??..");
-			choice = Checker.IntegerChecker(1, 5);
+			choice = checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
 				CreateTable();

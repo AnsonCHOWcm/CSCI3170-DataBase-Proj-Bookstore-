@@ -5,7 +5,6 @@ import java.text.*;
 
 public class Customer {
 	Checker checker;
-	static Connection con = Main.con;
 
 	public Customer() throws ParseException {
 		checker = new Checker();
@@ -24,21 +23,22 @@ public class Customer {
 			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
-                SearchISBN();
-            } else if (choice == 2) {
-                SearchBookTitle();
-            } else if (choice == 3) {
-                SearchAuthorName();
-            } else {
-                System.out.println("Back to Main Page.");
+				SearchISBN();
+			} else if (choice == 2) {
+				SearchBookTitle();
+			} else if (choice == 3) {
+				SearchAuthorName();
+			} else {
+				System.out.println("Back to Main Page.");
 				return;
-            }
+			}
 		}
 
 	}
 
 	public void SearchISBN() {
 		String ISBN = "";
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			System.out.println("Please enter ISBN : ");
@@ -65,7 +65,7 @@ public class Customer {
 				System.out.println(number + " :" + resultSet2.getString("author_name"));
 				number++;
 			}
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error]: ISBN Searching failed.");
@@ -76,6 +76,7 @@ public class Customer {
 	public void SearchBookTitle() {
 		String BookTitle = "";
 		String ISBN = "";
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			BookTitle = checker.BookTitlechecker();
@@ -103,7 +104,7 @@ public class Customer {
 				}
 
 			}
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Book Title Search failed.");
@@ -113,6 +114,7 @@ public class Customer {
 
 	public void SearchAuthorName() {
 		String AuthorName = "";
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			AuthorName = checker.AuthorNamechecker();
@@ -128,7 +130,7 @@ public class Customer {
 				System.out.println("No of Copies Available : " + resultSet.getInt("no_of_copies"));
 				System.out.println("Author Name : " + AuthorName);
 			}
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Author Name Search failed.");
@@ -147,6 +149,7 @@ public class Customer {
 		int quantity_avaliable = 0;
 		int price = 0;
 		String exit = "";
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			CID = checker.CustomerIDchecker();
@@ -236,7 +239,7 @@ public class Customer {
 			pstmt2.executeUpdate();
 
 			System.out.println("The Order has been created.");
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Order Creation failed.");
@@ -254,6 +257,7 @@ public class Customer {
 		int quantity_remaining = 0;
 		int price = 0;
 		int choice = -1;
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 
@@ -512,7 +516,7 @@ public class Customer {
 				}
 
 			}
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Order Altering failed");
@@ -526,6 +530,7 @@ public class Customer {
 		String pattern = "yyyy";
 		SimpleDateFormat ft = new SimpleDateFormat(pattern);
 		int number = 0;
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			customer_id = checker.CustomerIDchecker();
@@ -558,6 +563,7 @@ public class Customer {
 				System.out.println("All the orders have been printed.");
 
 			}
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Order Query failed.");
@@ -580,17 +586,17 @@ public class Customer {
 			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
-                BookSearch();
-            } else if (choice == 2) {
-                OrderCreation();
-            } else if (choice == 3) {
-                OrderAltering();
-            } else if (choice == 4) {
-                OrderQuery();
-            } else {
-                System.out.println("Thank you. See you next time. Bye Bye.");
+				BookSearch();
+			} else if (choice == 2) {
+				OrderCreation();
+			} else if (choice == 3) {
+				OrderAltering();
+			} else if (choice == 4) {
+				OrderQuery();
+			} else {
+				System.out.println("Thank you. See you next time. Bye Bye.");
 				return;
-            }
+			}
 
 		}
 

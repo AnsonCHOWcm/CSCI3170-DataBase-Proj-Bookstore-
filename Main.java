@@ -1,28 +1,9 @@
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Main {
-    static String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db1";
-    static String dbUsername = "Group1";
-    static String dbPassword = "CSCI3170";
-    static Connection con = null;
     static java.util.Date system_time;
 
     public static void main(String[] args) throws Exception {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(dbAddress, dbUsername, dbPassword);
-            System.out.println("Connection Success\n\n");
-        } catch (ClassNotFoundException e) {
-            System.out.println("[ERROR] Java MySQL DB Driver not found.");
-            System.exit(0);
-        }
-
         SystemDate.createTheInstance();
         SystemDate sdate = SystemDate.getInstance();
-
-        Checker checker = new Checker();
 
         while (true) {
             System.out.println("The System Date is now : " + sdate);
@@ -52,12 +33,6 @@ public class Main {
                 System.out.println("See you next time. Bye Bye.");
                 break;
             }
-        }
-
-        try {
-            con.close();
-        } catch (SQLException ex) {
-            System.out.println("[ERROR] SQL Exception happens when closing JDBC Connection");
         }
     }
 }

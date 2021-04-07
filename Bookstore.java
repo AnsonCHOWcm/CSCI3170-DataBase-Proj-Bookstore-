@@ -5,7 +5,6 @@ import java.util.*;
 
 public class Bookstore {
 	Checker menuchecker;
-	static Connection con = Main.con;
 
 	public Bookstore() {
 		menuchecker = new Checker();
@@ -25,15 +24,15 @@ public class Bookstore {
 			choice = Checker.IntegerChecker(1, 4);
 
 			if (choice == 1) {
-                OrderUpdate();
-            } else if (choice == 2) {
-                OrderQuery();
-            } else if (choice == 3) {
-                NMostPopular();
-            } else {
-                System.out.println("Thank you. See you next time. Bye Bye.");
+				OrderUpdate();
+			} else if (choice == 2) {
+				OrderQuery();
+			} else if (choice == 3) {
+				NMostPopular();
+			} else {
+				System.out.println("Thank you. See you next time. Bye Bye.");
 				return;
-            }
+			}
 		}
 
 	}
@@ -43,6 +42,7 @@ public class Bookstore {
 		int number_of_books = 0;
 		String shipping_status = "";
 		String order_id = "";
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			OID = menuchecker.OrderIDchecker();
@@ -72,6 +72,7 @@ public class Bookstore {
 
 				if (number_of_books == 0) {
 					System.out.println("There is no any book in the order. Please send a reminder to the user");
+					con.close();
 					return;
 				}
 
@@ -85,18 +86,16 @@ public class Bookstore {
 					stmt.executeUpdate(sql);
 
 					System.out.println("The Update has been made");
-
 				} else {
+					con.close();
 					return;
 				}
-
 			}
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Order Update failed.");
 		}
-
 	}
 
 	public void OrderQuery() throws ParseException {
@@ -104,6 +103,7 @@ public class Bookstore {
 		String pattern = "yyyy-MM";
 		SimpleDateFormat ft = new SimpleDateFormat(pattern);
 		int total_charge = 0;
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			Date = ft.parse(menuchecker.monthchecker());
@@ -143,7 +143,7 @@ public class Bookstore {
 			}
 
 			System.out.println("Total charge of the month is " + total_charge);
-
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Order Query failed.");
@@ -154,6 +154,7 @@ public class Bookstore {
 	public void NMostPopular() {
 		int N = -1;
 		Scanner reader = new Scanner(System.in);
+		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			System.out.println("Please input the N popular book number : ");
@@ -178,6 +179,7 @@ public class Bookstore {
 				System.out.println(rs.getInt("total"));
 			}
 			reader.close();
+			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
 			System.out.println("[Error] Order Update failed.");

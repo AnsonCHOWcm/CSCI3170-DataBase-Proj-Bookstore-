@@ -5,52 +5,53 @@ import java.text.*;
 
 public class SystemInterface {
 	Checker checker;
-	static Connection con = Main.con;
+
+	public void CreateTable() {
+        Connection con = DataBaseController.connectToSQL();
+        try {
+            Statement stmt = con.createStatement();
+            String bookSql = "Create table book" + "(ISBN CHAR(13)," + "title VARCHAR(100) NOT NULL,"
+                    + "unit_price INTEGER," + "no_of_copies INTEGER," + "CONSTRAINT PRIMARY KEY (ISBN),"
+                    + "CHECK (unit_price >=0)," + "CHECK (no_of_copies >=0))";
+
+            String customerSql = "Create table customer" + "(customer_id VARCHAR(10) NOT NULL,"
+                    + "name VARCHAR(50) NOT NULL," + "shipping_address VARCHAR(200) NOT NULL,"
+                    + "credit_card_no CHAR(19)," + "CONSTRAINT PRIMARY KEY (customer_id))";
+
+            String ordersSql = "Create table orders" + "(order_id CHAR(8)," + "o_date DATE," + "shipping_status CHAR,"
+                    + "charge INTEGER," + "customer_id VARCHAR(10) NOT NULL," + "CONSTRAINT PRIMARY KEY (order_id),"
+                    + "FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE NO ACTION,"
+                    + "CHECK (charge >=0) , CHECK (shipping_status = 'Y' || shipping_status = 'N'))";
+
+            String orderingSql = "Create table ordering" + "(order_id CHAR(8) NOT NULL," + "ISBN CHAR(13),"
+                    + "quantity INTEGER," + "CONSTRAINT PRIMARY KEY (order_id , ISBN),"
+                    + "FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE NO ACTION,"
+                    + "FOREIGN KEY (ISBN) REFERENCES book(ISBN)," + "CHECK (quantity>=0))";
+
+            String bookauthorSql = "Create table book_author" + "(ISBN CHAR(13) NOT NULL,"
+                    + "author_name VARCHAR(50) NOT NULL," + "CONSTRAINT PRIMARY KEY (ISBN , author_name),"
+                    + "FOREIGN KEY (ISBN) REFERENCES book(ISBN) ON DELETE NO ACTION)";
+
+            stmt.executeUpdate(bookSql);
+            stmt.executeUpdate(customerSql);
+            stmt.executeUpdate(ordersSql);
+            stmt.executeUpdate(orderingSql);
+            stmt.executeUpdate(bookauthorSql);
+
+            System.out.println("Done! All Tables are created!");
+            con.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+            System.out.println("[Error]: All tables have been created. Please try deleting all the tables first.");
+        }
 
 	public SystemInterface() throws ParseException {
 		checker = new Checker();
 	}
 
-	public void CreateTable() {
-		try {
-			Statement stmt = con.createStatement();
-			String bookSql = "Create table book" + "(ISBN CHAR(13)," + "title VARCHAR(100) NOT NULL,"
-					+ "unit_price INTEGER," + "no_of_copies INTEGER," + "CONSTRAINT PRIMARY KEY (ISBN),"
-					+ "CHECK (unit_price >=0)," + "CHECK (no_of_copies >=0))";
-
-			String customerSql = "Create table customer" + "(customer_id VARCHAR(10) NOT NULL,"
-					+ "name VARCHAR(50) NOT NULL," + "shipping_address VARCHAR(200) NOT NULL,"
-					+ "credit_card_no CHAR(19)," + "CONSTRAINT PRIMARY KEY (customer_id))";
-
-			String ordersSql = "Create table orders" + "(order_id CHAR(8)," + "o_date DATE," + "shipping_status CHAR,"
-					+ "charge INTEGER," + "customer_id VARCHAR(10) NOT NULL," + "CONSTRAINT PRIMARY KEY (order_id),"
-					+ "FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE NO ACTION,"
-					+ "CHECK (charge >=0) , CHECK (shipping_status = 'Y' || shipping_status = 'N'))";
-
-			String orderingSql = "Create table ordering" + "(order_id CHAR(8) NOT NULL," + "ISBN CHAR(13),"
-					+ "quantity INTEGER," + "CONSTRAINT PRIMARY KEY (order_id , ISBN),"
-					+ "FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE NO ACTION,"
-					+ "FOREIGN KEY (ISBN) REFERENCES book(ISBN)," + "CHECK (quantity>=0))";
-
-			String bookauthorSql = "Create table book_author" + "(ISBN CHAR(13) NOT NULL,"
-					+ "author_name VARCHAR(50) NOT NULL," + "CONSTRAINT PRIMARY KEY (ISBN , author_name),"
-					+ "FOREIGN KEY (ISBN) REFERENCES book(ISBN) ON DELETE NO ACTION)";
-
-			stmt.executeUpdate(bookSql);
-			stmt.executeUpdate(customerSql);
-			stmt.executeUpdate(ordersSql);
-			stmt.executeUpdate(orderingSql);
-			stmt.executeUpdate(bookauthorSql);
-
-			System.out.println("Done! All Tables are created!");
-
-		} catch (SQLException se) {
-			se.printStackTrace();
-			System.out.println("[Error]: All tables have been created. Please try deleting all the tables first.");
-		}
-	}
-
 	public void DeleteTable() {
+		Connection con = DataBaseController.connectToSQL();
+
 		try {
 			Statement stmt = con.createStatement();
 			String delBook = "drop table if exists book";
@@ -67,6 +68,7 @@ public class SystemInterface {
 
 			System.out.println("Done! All Tables are deleted.");
 
+			con.close();
 		} catch (SQLException se) {
 			System.out.println("[Error]: Delete tables error.");
 			se.printStackTrace();
@@ -75,6 +77,8 @@ public class SystemInterface {
 
 	public void InsertData() {
 		Scanner reader = new Scanner(System.in);
+		Connection con = DataBaseController.connectToSQL();
+
 		try {
 			System.out.println("Please the Path of folder containing the data");
 			String path = reader.nextLine().replace("\n", "");
@@ -125,6 +129,8 @@ public class SystemInterface {
 		String pattern = "yyyy-MM-dd";
 		SimpleDateFormat ft = new SimpleDateFormat(pattern);
 		boolean flag = false;
+		Connection con = DataBaseController.connectToSQL();
+
 		try {
 			Statement stmt = con.createStatement();
 
@@ -135,7 +141,10 @@ public class SystemInterface {
 				OrderDate = rs.getDate("order_date");
 
 			}
-
+			con.close();
+		} catch (SQLException se) {
+			System.out.println("[Error]: Set SystemDate error.");
+			se.printStackTrace();
 		} catch (Exception e) {
 			System.out.println("Record reading failed. Please try again.");
 		}
@@ -183,7 +192,7 @@ public class SystemInterface {
 			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
-				CreateTable();
+				DataBaseController.CreateTable();
 			} else if (choice == 2) {
 				DeleteTable();
 			} else if (choice == 3) {

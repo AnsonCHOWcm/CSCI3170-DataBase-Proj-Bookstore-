@@ -7,7 +7,7 @@ public class Customer {
 	Checker checker;
 
 	public Customer() throws ParseException {
-		this.checker = new Checker();
+		checker = new Checker();
 	}
 
 	public void BookSearch() {
@@ -44,7 +44,7 @@ public class Customer {
 			System.out.println("Please enter ISBN : ");
 			ISBN = checker.ISBNchecker();
 
-			String psql1 = "SELECT * FROM book  WHERE ISBN = ? ";
+			String psql1 = "SELECT * FROM book WHERE ISBN = ? ";
 			PreparedStatement pstmt = con.prepareStatement(psql1);
 			pstmt.setString(1, ISBN);
 			ResultSet resultSet1 = pstmt.executeQuery();
@@ -53,7 +53,8 @@ public class Customer {
 			pstmt = con.prepareStatement(psql2);
 			pstmt.setString(1, ISBN);
 			ResultSet resultSet2 = pstmt.executeQuery();
-
+			
+			while(resultSet1.next()) {
 			System.out.println("Here are the Search Result.");
 			System.out.println("Book Title : " + resultSet1.getString("title"));
 			System.out.println("ISBN : " + ISBN);
@@ -65,6 +66,7 @@ public class Customer {
 				System.out.println(number + " :" + resultSet2.getString("author_name"));
 				number++;
 			}
+		}
 			con.close();
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -114,21 +116,31 @@ public class Customer {
 
 	public void SearchAuthorName() {
 		String AuthorName = "";
+		String ISBN = "";
 		Connection con = DataBaseController.connectToSQL();
 
 		try {
 			AuthorName = checker.AuthorNamechecker();
-			String psql = "SELECT * FROM book, book_author  WHERE title = ? ORDER BY title ASC , ISBN ASC , author_name ASC ";
+			String psql = "SELECT ISBN FROM book_author WHERE author_name = ?";
 			PreparedStatement pstmt = con.prepareStatement(psql);
 			pstmt.setString(1, AuthorName);
 			ResultSet resultSet = pstmt.executeQuery();
+			
+			while(resultSet.next()) {
+			ISBN = resultSet.getString("ISBN");
+			psql = "SELECT * FROM book, book_author  WHERE author_name = ? , ISBN = ? ORDER BY title ASC , ISBN ASC , author_name ASC ";
+			pstmt = con.prepareStatement(psql);
+			pstmt.setString(1, AuthorName);
+			pstmt.setString(2,ISBN);
+			ResultSet resultSet2 = pstmt.executeQuery();
 			System.out.println("Here are the searching result:");
-			while (resultSet.next()) {
-				System.out.println("Book Title : " + resultSet.getString("title"));
-				System.out.println("ISBN : " + resultSet.getString("ISBN"));
-				System.out.println("Unit Price : " + resultSet.getInt("unit_price"));
-				System.out.println("No of Copies Available : " + resultSet.getInt("no_of_copies"));
+			while (resultSet2.next()) {
+				System.out.println("Book Title : " + resultSet2.getString("title"));
+				System.out.println("ISBN : " + resultSet2.getString("ISBN"));
+				System.out.println("Unit Price : " + resultSet2.getInt("unit_price"));
+				System.out.println("No of Copies Available : " + resultSet2.getInt("no_of_copies"));
 				System.out.println("Author Name : " + AuthorName);
+			}
 			}
 			con.close();
 		} catch (SQLException se) {
@@ -571,7 +583,8 @@ public class Customer {
 
 	}
 
-	public void CommandLineInterface(Scanner in) throws ParseException {
+	public void CommandLineInterface() throws ParseException {
+		int choice = -1;
 		while (true) {
 			System.out.println("<This is the customer interface.>");
 			System.out.println("-------------------------------");
@@ -580,27 +593,25 @@ public class Customer {
 			System.out.println("3. Order Altering.");
 			System.out.println("4. Order Query.");
 			System.out.println("5. Back to main menu.");
-			System.out.print("Your choice?...");
-			
-			try {
-				if (in.hasNext()) {
-                    int choice = in.nextInt();
-					if (choice == 1) {
-						BookSearch();
-					} else if (choice == 2) {
-						OrderCreation();
-					} else if (choice == 3) {
-						OrderAltering();
-					} else if (choice == 4) {
-						OrderQuery();
-					} else {
-						System.out.println("Thank you. See you next time. Bye Bye.");
-						return;
-					}
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("[Error] Invalid Input");
+
+			System.out.println("Your choice?...");
+			choice = Checker.IntegerChecker(1, 5);
+
+			if (choice == 1) {
+				BookSearch();
+			} else if (choice == 2) {
+				OrderCreation();
+			} else if (choice == 3) {
+				OrderAltering();
+			} else if (choice == 4) {
+				OrderQuery();
+			} else {
+				System.out.println("Thank you. See you next time. Bye Bye.");
+				return;
 			}
+
 		}
+
 	}
+
 }

@@ -8,26 +8,6 @@ public class Checker {
 		//
 	}
 
-	static public int IntegerChecker(int min, int max) {
-		while (true) {
-			try {
-				Scanner in = new Scanner(System.in);
-				if (in.hasNext()) {
-					int cmd = in.nextInt();
-
-					if (cmd >= min && cmd <= max) {
-						in.close();
-						return cmd;
-					} else {
-						System.out.println("[Error] Please type between " + min + "-" + max + ".");
-					}
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("[Error] Invalid Input");
-			}
-		}
-	}
-
 	public String ISBNchecker() {
 		String input = "";
 		while (true) {

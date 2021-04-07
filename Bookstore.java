@@ -8,7 +8,7 @@ public class Bookstore {
 	static Connection con = Main.con;
 
 	public Bookstore() {
-		menuchecker = Checker.getInstance();
+		menuchecker = new Checker();
 	}
 
 	public void CommandLineInterface() throws ParseException {
@@ -22,7 +22,7 @@ public class Bookstore {
 			System.out.println("4. Back to main menu.");
 
 			System.out.println("Your choice?...");
-			choice = menuchecker.IntegerChecker(1, 4);
+			choice = Checker.IntegerChecker(1, 4);
 
 			if (choice == 1) {
                 OrderUpdate();

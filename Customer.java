@@ -21,7 +21,7 @@ public class Customer {
 			System.out.println("4. Exit");
 
 			System.out.println("Your choice?...");
-			choice = checker.IntegerChecker(1, 5);
+			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
                 SearchISBN();
@@ -577,7 +577,7 @@ public class Customer {
 			System.out.println("5. Back to main menu.");
 
 			System.out.println("Your choice?...");
-			choice = checker.IntegerChecker(1, 5);
+			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
                 BookSearch();

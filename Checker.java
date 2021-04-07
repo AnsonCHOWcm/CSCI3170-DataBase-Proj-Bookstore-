@@ -1,17 +1,14 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Checker {
 	Scanner reader;
 
-	private static Checker instance = new Checker();
-
-	public static Checker getInstance() {
-		return instance;
+	public Checker() {
+		//
 	}
 
-	private Checker() {}
-
-	public int IntegerChecker(int min, int max) {
+	static public int IntegerChecker(int min, int max) {
 		Scanner in = new Scanner(System.in);
 
 		while (true) {

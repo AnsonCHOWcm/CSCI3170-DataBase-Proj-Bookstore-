@@ -25,7 +25,7 @@ public class Main {
         System.out.println("Connection Success\n\n");
         int choice = -1;
 
-        Checker checker = Checker.getInstance();
+        Checker checker = new Checker();
 
         while (true) {
             System.out.println("The System Date is now : " + system_time);
@@ -38,7 +38,7 @@ public class Main {
             System.out.println("5. Quit the system.......");
 
             System.out.println("Please enter your choice??..");
-            choice = checker.IntegerChecker(1, 5);
+            choice = Checker.IntegerChecker(1, 5);
 
             if (choice == 1) {
                 SystemInterface admin = new SystemInterface();

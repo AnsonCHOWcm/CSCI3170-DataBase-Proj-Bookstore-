@@ -8,7 +8,7 @@ public class SystemInterface {
 	static Connection con = Main.con;
 
 	public SystemInterface() throws ParseException {
-		checker = Checker.getInstance();
+		checker = new Checker();
 	}
 
 	public void CreateTable() {
@@ -180,7 +180,7 @@ public class SystemInterface {
 			System.out.println("5. Back to main menu.");
 
 			System.out.println("Please enter your choice??..");
-			choice = checker.IntegerChecker(1, 5);
+			choice = Checker.IntegerChecker(1, 5);
 
 			if (choice == 1) {
 				CreateTable();

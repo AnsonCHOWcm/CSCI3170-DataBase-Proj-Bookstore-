@@ -8,7 +8,7 @@ public class Customer {
 	static Connection con = Main.con;
 
 	public Customer() throws ParseException {
-		checker = Checker.getInstance();
+		checker = new Checker();
 	}
 
 	public void BookSearch() {

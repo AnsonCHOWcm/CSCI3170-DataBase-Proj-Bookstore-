@@ -30,7 +30,7 @@ public class Main {
                         admin.CommandLineInterface(in);
                     } else if (choice == 2) {
                         Customer customer = new Customer();
-                        customer.CommandLineInterface(in);
+                        customer.CommandLineInterface();
                     } else if (choice == 3) {
                         Bookstore bookstore = new Bookstore();
                         bookstore.CommandLineInterface(in);
